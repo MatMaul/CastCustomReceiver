@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
   <script type="text/javascript"
@@ -8,33 +7,7 @@
 <body>
   <cast-media-player></cast-media-player>
   <script>
-    const context = cast.framework.CastReceiverContext.getInstance();
-    const playerManager = context.getPlayerManager();
-
-    // intercept the LOAD request to be able to read in a contentId and get data
-    playerManager.setMessageInterceptor(
-        cast.framework.messages.MessageType.LOAD, loadRequestData => {
-            if (loadRequestData.media && loadRequestData.media.contentId) {
-                return thirdparty.getMediaById(loadRequestData.media.contentId)
-                .then(media => {
-                  if (media) {
-                    loadRequestData.media.contentUrl = media.url;
-                    loadRequestData.media.contentType = media.contentType;
-                    loadRequestData.media.metadata = media.metadata;
-                  }
-                  return loadRequestData;
-                });
-            }
-            return loadRequestData;
-        });
-
-    // listen to all Core Events
-    playerManager.addEventListener(cast.framework.events.category.CORE,
-        event => {
-            console.log(event);
-        });
-
-    context.start();
+    cast.framework.CastReceiverContext.getInstance().start();
   </script>
 </body>
 </html>
